@@ -4,6 +4,21 @@
 #include "miracl.h"
 #include <time.h>
 
+static void XsetPoint(epoint* Result){
+    big XPoint;
+    XPoint = mirvar(0);
+    epoint_get(Result,XPoint,XPoint);
+    epoint_set(XPoint,XPoint,0,Result);
+}
+static big getPoint(epoint* Result){
+    big XPoint;
+    XPoint = mirvar(0);
+    epoint_get(Result,XPoint,XPoint);
+    return XPoint;
+}
+
+
+
 static big concat(big input1, big input2) {
     char inputChar1[1000]="";
     char inputChar2[1000]="";

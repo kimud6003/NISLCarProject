@@ -45,7 +45,7 @@ int main(int argc, char const *argv[]){
     Ri=mirvar(0);
     mip->IOBASE=16;
     // argv 값 넣어주기
-    cinstr(PKi,"4B2A6A53A5DD89F9F315757859FEC5A4261FAC0013DE3A9A");
+    cinstr(PKi,"BD1BD462D74564636BDCF08EC6ED56BD350E0E903496772F");
     bytes_to_big(strlen("kimud6003"),"kimud6003",ID);
 
     //ECC 설정 

@@ -43,16 +43,8 @@ int main(int argc, char const *argv[])
     g=epoint_init();
     PK=epoint_init();
     test=epoint_init();
-    while(1){
     bigdig(40,16,ski);
-        if(epoint_set(ski,ski,0,test)==TRUE)
-            break;
-    }
-    while(1){
     bigdig(40,16,ai);
-        if(epoint_set(ai,ai,0,test)==TRUE)
-            break;
-    }
     epoint_set(x,y,0,g);
 
     ecurve_mult(ski,g,PK);
@@ -63,8 +55,6 @@ int main(int argc, char const *argv[])
     cotnum(ai,stdout);
     printf("PK : ");
     cotnum(PKX,stdout);
-    printf("\n%d",epoint_set(PKX,PKX,0,test));
-    // cotnum(y,stdout);
 
     
     return 0;

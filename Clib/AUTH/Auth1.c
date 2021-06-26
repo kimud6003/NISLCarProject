@@ -61,17 +61,17 @@ int main(int argc, char const *argv[]){
     zi=mirvar(0);
     mip->IOBASE=16;
     // argv 값 넣어주기
-    cinstr(PKi,"4B2A6A53A5DD89F9F315757859FEC5A4261FAC0013DE3A9A");
+    cinstr(ski,"D4C71685B73F4ECDB6665088F589CDCD9210365E");
+    cinstr(PKi,"BD1BD462D74564636BDCF08EC6ED56BD350E0E903496772F");
     bytes_to_big(strlen("kimud6003"),"kimud6003",ID);
     bytes_to_big(strlen("1q2w3e"),"1q2w3e",PW);
-    cinstr(Bi,"D9C11D6A66C90C02D9F268F66A609C20A2792E76");
-    cinstr(Ci,"58EBAE07A71B46C675E7C10AED1CE385A5FF3004");
-    cinstr(Di,"8225AF811F0E10723A0CB6F0703C6B9915B1BDCF2D1E93E");
-    cinstr(Ei," 89A75444F65905E7CD3537F49183797D3D5F5709");
-    cinstr(HPID,"DDBD58158CEFF85E8705AFFE9B1D07AC7C6792BE");
-    cinstr(PKs,"56F86E30F456E4296E7F3DA9AB16A262320A16001BCBED4E");
-    cinstr(ski,"3934A2306A37E7BDD19E7141839751B3EA77E0B3");
-    cinstr(sks,"7B4FCDB11F9287782376A2C36B19A1CC5F8D0E0B");
+    cinstr(Bi,"3AFCB91F848BC6237403F891F06616872F018EC4");
+    cinstr(Ci,"FE60D24B0101681B61143E5EE77F28B0933487B1");
+    cinstr(Di,"7D467858681F362EACA9B35F446885A009EC90B66AE4127F");
+    cinstr(Ei,"2C2F392554DD59E175D6EEB5A752B9CE513F017");
+    cinstr(HPID,"F3607136FF16157C48D3271C6DB40462B5FC5437");
+    cinstr(PKs,"999A48ADD10173A41BCCF88D407626D57867F164D84AB712");
+    cinstr(sks,"5A1ADFD946AD2ECB15F00518D7861FF861A4D88E");
     char requst[] = "3430주 10";
 
 
@@ -125,14 +125,17 @@ int main(int argc, char const *argv[]){
 
 // 삭제 
 
-    AUTH =hashing1(concat(concat(concat(PID,Xi),hashing2(requst)),T));
-    printf("TETET : ");
-    cotnum(AUTH,stdout);
-    ecurve_mult(AUTH,Eski,tmpResult);
-    epoint_get(tmpResult,AUTH,AUTH);
+    AUTH = hashing1(concat(concat(concat(PID,Xi),hashing2(requst)),T));
+    // printf("Ecurve mult : ");
+    // cotnum(AUTH,stdout);
+    // ecurve_mult(AUTH,Eski,tmpResult);
+    // epoint_get(tmpResult,AUTH,AUTH);
+    multiply(AUTH,ski,AUTH);
     add(xi,AUTH,AUTH);
+    printf("xi:");
+    cotnum(xi,stdout);
 
-    printf("Xi2 : ");
+    printf("Xi : ");
     cotnum(Xi,stdout);
 
     printf("CPID : ");
