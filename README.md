@@ -11,35 +11,35 @@
 
   - [x] User 등록
    
-    <img src="./img/Setup%20User.png" style="width : 400px"> </img>
+    <img src="./img/Setup%20User.png" style="width : 200px"> </img>
 
 
   - [x] Owner 등록
   
-    <img src="./img/Setup%20Owner.png" style="width : 400px"> </img>
+    <img src="./img/Setup%20Owner.png" style="width : 200px"> </img>
 
   - [x] AUTH PHASE 1 
 
-    <img src="./img/AUTH%20PHASE%201.png" style="width : 400px"> </img>
+    <img src="./img/AUTH%20PHASE%201.png" style="width : 200px"> </img>
 
 
   - [x] AUTH PHASE 2 
 
-    <img src="./img/AUTH%20PHASE%202.png" style="width : 400px"> </img>
+    <img src="./img/AUTH%20PHASE%202.png" style="width : 200px"> </img>
 
 
   - [x] AUTH PHASE 3 
   
-    <img src="./img/AUTH%20PHASE%203.png" style="width : 400px"> </img>
+    <img src="./img/AUTH%20PHASE%203.png" style="width : 200px"> </img>
 
   - [x] AUTH PHASE 4 
   
-    <img src="./img/AUTH%20PHASE%204.png" style="width : 400px"> </img>
+    <img src="./img/AUTH%20PHASE%204.png" style="width : 200px"> </img>
 
 
   - [x] AUTH PHASE 5 
   
-    <img src="./img/AUTH%20PHASE%205.png" style="width : 400px"> </img>
+    <img src="./img/AUTH%20PHASE%205.png" style="width : 200px"> </img>
 
 
 ## NODEJS 서버 구축
