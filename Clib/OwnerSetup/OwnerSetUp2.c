@@ -7,8 +7,6 @@
 #include <time.h>
 
 char *ecp="FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFF";
-char *skTAString= "E2AC3E2032159FA6A804BA5F9640DEF4EBDE357202FE025B";
-char *PKTAString="AB072A1C611A0B363D4937540FB9EACBC0AD1A82EF2F2647";
 
 char *ecb="64210519E59C80E70FA7E9AB72243049FEB8DEECC146B9B1";
 char *ecx="3B5EFCFF203B1934E7CD717CD186AB00F79058E8831BDC73";
@@ -24,35 +22,37 @@ int main(int argc, char const *argv[]){
     srand(time(NULL));
     long seed = rand()%100;
     miracl *mip=mirsys(500,0);
-    big ri,CID,ID,hashing_result,Ri,zi,PKi;
-    epoint *g,*PKTA, *tmpResult, *SKTA;
-    big a,b,p,PKx,y,gx,gy,SKx;
+    int PKta_D = -1, Rj_D= -1;
+    big rj,CID,ID,hashing_result,Rj,zj,PKj;
+    epoint *g,*PKTA, *tmpResult;
+    big a,b,p,PKta,y,gx,gy,SKta;
     irand(seed);
-    ri=mirvar(0);
+    rj=mirvar(0);
     CID=mirvar(0);
     ID=mirvar(0);
-    PKi=mirvar(0);
+    PKj=mirvar(0);
     //ECC 설정 
     a=mirvar(0);
     b=mirvar(0);
     p=mirvar(0);
-    PKx=mirvar(0);
-    SKx=mirvar(0);
+    PKta=mirvar(0);
+    SKta=mirvar(0);
     gx=mirvar(0);
     gy=mirvar(0);
     y=mirvar(0);
-    zi=mirvar(0);
-    Ri=mirvar(0);
+    zj=mirvar(0);
+    Rj=mirvar(0);
     mip->IOBASE=16;
     // argv 값 넣어주기
-    cinstr(PKi,"8FFBFDA5FCF8C72A230FDE4B49C310DA3DEB7D394CE85B3D");
+    cinstr(PKj,"8FFBFDA5FCF8C72A230FDE4B49C310DA3DEB7D394CE85B3D");
+    cinstr(PKta,"56F86E30F456E4296E7F3DA9AB16A262320A16001BCBED4E");
+    PKta_D = 1;
+    cinstr(SKta,"7B4FCDB11F9287782376A2C36B19A1CC5F8D0E0B");
     bytes_to_big(strlen("kimud6003"),"kimud6003",ID);
 
     //ECC 설정 
     convert(-3,a);
     cinstr(b,ecb);
-    cinstr(PKx,PKTAString);
-    cinstr(SKx,skTAString);
     cinstr(gx,egx);
     cinstr(gy,egy);
     cinstr(p,ecp);
@@ -61,28 +61,27 @@ int main(int argc, char const *argv[]){
     g=epoint_init();
     tmpResult=epoint_init();
     PKTA=epoint_init();
-    SKTA=epoint_init();
-    epoint_set(PKx,PKx,0,PKTA); //ECC 설정완료
-    epoint_set(SKx,SKx,0,SKTA); //ECC 설정완료
+    epoint_set(PKta,PKta,PKta_D,PKTA); //ECC 설정완료
     epoint_set(gx,gy,0,g); //ECC 설정완료
 
-    bigdig(40,16,ri);
-    ecurve_mult(ri,PKTA,tmpResult);
+    bigdig(40,16,rj);
+    ecurve_mult(rj,PKTA,tmpResult);
     epoint_get(tmpResult,y,y);
     CID=XOR(ID,hashing1(y));
     printf("CID : ");
     cotnum(CID,stdout);
 
-    ecurve_mult(ri,g,tmpResult);
-    epoint_get(tmpResult,Ri,Ri);
-    printf("Ri : ");
-    cotnum(Ri,stdout);
+    ecurve_mult(rj,g,tmpResult);
+    Rj_D =epoint_get(tmpResult,Rj,Rj);
+    printf("Rj : ");
+    cotnum(Rj,stdout);
+    printf("Rj_D : %d,\n",Rj_D);
 
-    ecurve_mult(hashing1(concat(concat(CID,Ri),PKi)),SKTA,tmpResult);
+    multiply(hashing1(concat(concat(CID,Rj),PKj)),SKta,zj);
     epoint_get(tmpResult,y,y);
-    add(ri,y,zi);
-    printf("zi : ");
-    cotnum(zi,stdout);
+    add(rj,y,zj);
+    printf("zj : ");
+    cotnum(zj,stdout);
 
 
     return 0;

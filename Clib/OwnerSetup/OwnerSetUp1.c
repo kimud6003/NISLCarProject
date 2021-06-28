@@ -16,7 +16,8 @@ int main(int argc, char const *argv[])
     srand(time(NULL));
     long seed = rand()%100;
     miracl *mip=mirsys(500,0);
-    epoint *g,*PK,*test;
+    int PKj_D = -1;
+    epoint *g,*PKj,*test;
     big ai,skj;
     big a,b,p,x,y;
     irand(seed);
@@ -39,21 +40,18 @@ int main(int argc, char const *argv[])
     //  y2 = x3 + Ax + B (mod p) 의형태로 진행
     ecurve_init(a,b,p,MR_BEST);
     g=epoint_init();
-    PK=epoint_init();
+    PKj=epoint_init();
     test=epoint_init();
-    while(1){
     bigdig(40,16,skj);
-        if(epoint_set(skj,skj,0,test)==TRUE)
-            break;
-    }
     epoint_set(x,y,0,g);
 
-    ecurve_mult(skj,g,PK);
-    epoint_get(PK,x,x);
+    ecurve_mult(skj,g,PKj);
+    PKj_D=epoint_get(PKj,x,x);
     printf("SKj : ");
     cotnum(skj,stdout);
-    printf("PK : ");
+    printf("PKj : ");
     cotnum(x,stdout);
+    printf("PKj_D : %d\n",PKj_D);
     // cotnum(y,stdout);
 
     

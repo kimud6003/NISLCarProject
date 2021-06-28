@@ -22,11 +22,12 @@ int main(int argc, char const *argv[]){
    
     srand(time(NULL));
     long seed = rand()%100;
-    miracl *mip=mirsys(500,0);
+    miracl *mip=mirsys(1000,0);
+    int Xi_D=-1;
     big sks;
-    big PKi,Bi,Ci,Di,Ei,HPID,PKs,ski,ID,PW,tmpPoint;
-    big xi,CPID,PID,HPW,ai,Ei_,Xi,zi,AUTH,T;
-    epoint *g,*Eski, *EPKs,*tmpResult, *ESKs; 
+    big Bi,Ci,Di,Ei,HPID,PKs,ski,ID,PW,tmpPoint;
+    big xi,CPID,PID,HPW,ai,Ei_,Xi,zi,AUTH,T1;
+    epoint *g,*EPKs,*tmpResult; 
     big a,b,p,y,gx,gy;
     irand(seed);
     sks=mirvar(0);
@@ -37,7 +38,6 @@ int main(int argc, char const *argv[]){
     ID=mirvar(0);
     PW=mirvar(0);
     HPW=mirvar(0);
-    PKi=mirvar(0);
     PKs=mirvar(0);
     AUTH = mirvar(0);
     tmpPoint=mirvar(0);
@@ -49,7 +49,7 @@ int main(int argc, char const *argv[]){
     Di = mirvar(0);
     Ei = mirvar(0);
     Ei_ = mirvar(0);
-    T = mirvar(0);
+    T1 = mirvar(0);
 
     //ECC 설정 
     a=mirvar(0);
@@ -61,15 +61,14 @@ int main(int argc, char const *argv[]){
     zi=mirvar(0);
     mip->IOBASE=16;
     // argv 값 넣어주기
-    cinstr(ski,"D4C71685B73F4ECDB6665088F589CDCD9210365E");
-    cinstr(PKi,"BD1BD462D74564636BDCF08EC6ED56BD350E0E903496772F");
+    cinstr(ski,"2A98E2DAC9176641F4DCDD7233006991016AEFD2");
     bytes_to_big(strlen("kimud6003"),"kimud6003",ID);
     bytes_to_big(strlen("1q2w3e"),"1q2w3e",PW);
-    cinstr(Bi,"3AFCB91F848BC6237403F891F06616872F018EC4");
-    cinstr(Ci,"FE60D24B0101681B61143E5EE77F28B0933487B1");
-    cinstr(Di,"7D467858681F362EACA9B35F446885A009EC90B66AE4127F");
-    cinstr(Ei,"2C2F392554DD59E175D6EEB5A752B9CE513F017");
-    cinstr(HPID,"F3607136FF16157C48D3271C6DB40462B5FC5437");
+    cinstr(Bi,"F480A159D6AC46FAA9D3B11C084FEF28C4D1C709");
+    cinstr(Ci,"B305A88936526433C8786D4E793E207C9BB1E738");
+    cinstr(Di,"6E605C742C7E206402C00EC5794FCAFD90DE570ADADA68E8DFDA91278483A31C034F7AC1234D409");
+    cinstr(Ei,"8D238797971A674D17440EB586A5A2721D757280");
+    cinstr(HPID,"A671F548A4EDBFDE053801BFA0AB33B240AE6A91");
     cinstr(PKs,"999A48ADD10173A41BCCF88D407626D57867F164D84AB712");
     cinstr(sks,"5A1ADFD946AD2ECB15F00518D7861FF861A4D88E");
     char requst[] = "3430주 10";
@@ -82,12 +81,11 @@ int main(int argc, char const *argv[]){
     cinstr(gy,egy);
     cinstr(p,ecp);
 
+    
     ecurve_init(a,b,p,MR_BEST);
     g=epoint_init();
     tmpResult=epoint_init();
-    Eski=epoint_init();
     EPKs=epoint_init();
-    epoint_set(ski,ski,0,Eski); //ECC 설정완료
     epoint_set(PKs,PKs,0,EPKs); //ECC 설정완료
     epoint_set(gx,gy,0,g); //ECC 설정완료
 
@@ -101,42 +99,31 @@ int main(int argc, char const *argv[]){
         printf("ID miss match");
         return 0;
     }
-    time_t T1;
-    time(&T1);
-    convert(T1,T);
+    time_t T;
+    time(&T);
+    convert(T,T1);
 
     bigdig(40,16,xi);
 
     ecurve_mult(xi,g,tmpResult);
-    epoint_get(tmpResult,Xi,Xi);
+    Xi_D=epoint_get(tmpResult,Xi,Xi);
     PID = XOR(HPID,HPW);
     printf("PID : ");
     cotnum(PID,stdout);
     ecurve_mult(xi,EPKs,tmpResult);
     epoint_get(tmpResult,tmpPoint,tmpPoint);
     CPID = XOR(PID,hashing1(tmpPoint));
-// 삭제
-    // ESKs = epoint_init();
-    // epoint_set(Xi,Xi,0,ESKs);
-    // ecurve_mult(sks,ESKs,tmpResult);
-    // epoint_get(tmpResult,tmpPoint,tmpPoint);
-    // printf("2 : ");
-    // cotnum(tmpPoint,stdout);
 
-// 삭제 
-
-    AUTH = hashing1(concat(concat(concat(PID,Xi),hashing2(requst)),T));
-    // printf("Ecurve mult : ");
-    // cotnum(AUTH,stdout);
-    // ecurve_mult(AUTH,Eski,tmpResult);
-    // epoint_get(tmpResult,AUTH,AUTH);
+    AUTH = hashing1(concat(concat(concat(PID,Xi),hashing2(requst)),T1));
     multiply(AUTH,ski,AUTH);
     add(xi,AUTH,AUTH);
+
     printf("xi:");
     cotnum(xi,stdout);
 
     printf("Xi : ");
     cotnum(Xi,stdout);
+    printf("Xi_D : %d\n",Xi_D);
 
     printf("CPID : ");
     cotnum(CPID,stdout);
@@ -144,8 +131,8 @@ int main(int argc, char const *argv[]){
     printf("AUTH : ");
     cotnum(AUTH,stdout);
 
-    printf("T : ");
-    cotnum(T,stdout);
+    printf("T1 : ");
+    cotnum(T1,stdout);
 
     return 0;
 }

@@ -13,6 +13,7 @@ int main(int argc, char const *argv[])
     //     return 0;
     // }
     long seed = rand()%100;
+    int Ri_D=-1;
     miracl *mip=mirsys(500,0);
     big Bi,Ci,Di,Ei,HPID, tmp;
     big ai,ID,PW,HPW,ski,PID,hashing_result,Ri,zi;
@@ -37,11 +38,12 @@ int main(int argc, char const *argv[])
     // argv 입력값
     bytes_to_big(strlen("kimud6003"),"kimud6003",ID);
     bytes_to_big(strlen("1q2w3e"),"1q2w3e",PW);
-    cinstr(ski,"D4C71685B73F4ECDB6665088F589CDCD9210365E");
-    cinstr(ai,"4EDBEEC9A79133209090CD5DBAA5A9CD10E6259D");
-    cinstr(PID,"686C2E403939827CCA8229EAD437D6F5D126F068");
-    cinstr(Ri,"95C02223361E60ECD0D52437109C02099EE15BB08DC461CC");
-    cinstr(zi,"7D467858F310FB2CDF1276CC0FCFD5690B5773820C31E510");
+    cinstr(ski,"2A98E2DAC9176641F4DCDD7233006991016AEFD2");
+    cinstr(ai,"80A7F68FF5B6B3F94D4084D0428C5062FB366C50");
+    cinstr(PID,"A54A9FB5C7FBD2592D8D5D1D1A9846F7C018DB09");
+    cinstr(Ri,"331921FB991C6DC47BB5ED0C750072AF281D74A4C97ED08F");
+    Ri_D = 0;
+    cinstr(zi,"6E605C742C7E206402C00EC5794FCAFD90DE5707374CE53ECFB125DFD634608DC3CDF55E4FBBC63");
 
     HPW = hashing1(concat(PW,ai));
     Bi = XOR(hashing1(concat(ID,PW)),ai);
@@ -62,6 +64,7 @@ int main(int argc, char const *argv[])
     cotnum(HPID,stdout);
     printf("Ri : ");
     cotnum(Ri,stdout);
+    printf("Ri_D : %d\n",Ri_D);
 
     return 0;
 }

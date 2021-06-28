@@ -4,6 +4,13 @@
 #include "miracl.h"
 #include <time.h>
 
+static big setPoint(epoint* Result,int curveDefine){
+    big XPoint;
+    XPoint = mirvar(0);
+    epoint_set(XPoint,XPoint,curveDefine,Result);
+    return XPoint;
+}
+
 static big concat(big input1, big input2) {
     char inputChar1[1000]="";
     char inputChar2[1000]="";
@@ -23,8 +30,8 @@ static big hashing2(big input){
     sha sh;
     big o;
     o = mirvar(0);
-    char inputChar[100]="";
-    char outputChar[100]="";
+    char inputChar[1000]="";
+    char outputChar[1000]="";
     cotstr(input,inputChar);
     shs256_init(&sh);
     int loop= strlen(inputChar);
@@ -40,8 +47,8 @@ static big hashing2(big input){
 static big hashing1(big input){ 
     sha sh;
     big o = mirvar(0);
-    char inputChar[100]="";
-    char outputChar[100]="";
+    char inputChar[1000]="";
+    char outputChar[1000]="";
     cotstr(input,inputChar);
     shs_init(&sh);
     int loop= strlen(inputChar);

@@ -19,6 +19,7 @@ int main(int argc, char const *argv[])
     epoint *g,*PK,*test;
     big ai,ski;
     big a,b,p,x,y,PKX;
+    int PKi_D;
     mip->IOBASE=16;
     irand(seed);
 
@@ -48,13 +49,14 @@ int main(int argc, char const *argv[])
     epoint_set(x,y,0,g);
 
     ecurve_mult(ski,g,PK);
-    epoint_get(PK,PKX,PKX);
+    PKi_D = epoint_get(PK,PKX,PKX);
     printf("ski : ");
     cotnum(ski,stdout);
     printf("ai : ");
     cotnum(ai,stdout);
-    printf("PK : ");
+    printf("PKi : ");
     cotnum(PKX,stdout);
+    printf("PKi_D : %d\n",PKi_D);
 
     
     return 0;
