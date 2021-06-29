@@ -118,6 +118,9 @@ int main(int argc, char const *argv[]){
     }
 
     bigdig(40,16,qs);
+    printf("qs : ");
+    cotnum(qs,stdout);
+
     ecurve_mult(qs,g,tmpResult);
     QS_D=epoint_get(tmpResult,Qs,Qs);
 

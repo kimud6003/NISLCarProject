@@ -68,12 +68,12 @@ int main(int argc, char const *argv[]){
     mip->IOBASE=16;
     // argv 값 넣어주기
     cinstr(skj,"A8522064E8B58B1846DECE8EB4C08F756583E454");
-    cinstr(Qs,"B22B3E44406A5D0F1BD1E05749B8B568129A88E877363620");
+    cinstr(Qs,"59203ACB0FE0327B8FA9D369B7DCA6621672D0A0F62C5716");
     QS_D= 0;
     cinstr(SID,"AAAA");
-    cinstr(AUTH_S,"F4DE69F53051E4F609BA21C2337F93EB7EB65D3E15F5F1B8D699ECA50F7EC0B527A3F55136E2A73");
-    cinstr(T2,"60D9C59B");
-    cinstr(SM1,"A7977E3AC0AC6AF883AB64D5CB6A100F115554ED842B97AA");
+    cinstr(AUTH_S,"3998C72B78D4860EEE80A147C647C47C37C12552363E0651757E129775AD20B8A590BE79D901BFA8");
+    cinstr(T2,"60D9DFD4");
+    cinstr(SM1,"A7977E3A231EB6EDFCD50466250012A925DAF7FE724E5C88");
     cinstr(PKs,"999A48ADD10173A41BCCF88D407626D57867F164D84AB712");
     cinstr(PKc,"B9E7FAB9D8ACF0E8CE7500678C679112B5AA15DBB1BC1A4F");
     PKs_D=1;
@@ -121,7 +121,9 @@ int main(int argc, char const *argv[]){
     time_t T;
     time(&T);
     convert(T,T3);
-    multiply(Xi_,yj,tmpPoint);
+
+    // ecurve_mult(yj,Xi_,tmpResult);
+    multiply(yj,Xi_,tmpPoint);
     CM1 = XOR(CODE,hashing1(tmpPoint));
     CM2 = hashing1(concat(concat(hashing1(CODE),tmpPoint),T3));
     multiply(PKc,yj,tmpPoint);
@@ -133,6 +135,8 @@ int main(int argc, char const *argv[]){
 
     printf("Yj : ");
     cotnum(Yj,stdout);
+
+    printf("Yj_D : %d\n",Yj_D);
 
     printf("CM1 : ");
     cotnum(CM1,stdout);

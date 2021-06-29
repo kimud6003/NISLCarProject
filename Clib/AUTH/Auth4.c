@@ -22,40 +22,34 @@ int main(int argc, char const *argv[]){
     srand(time(NULL));
     long seed = rand()%100;
     miracl *mip=mirsys(100,0);
-    int QS_D=-1,PKs_D=-1,Yj_D=-1;
-    big Qs,SID,AUTH_S,T2,SM1,skj,PKs,CODE,yj;
-    big Xi_,tmpPoint,AUTH_S_P,checkPoint,PKc;
-    big CM1,CM2,CM3,CM4,CM5,CM6,Yj,T3;
-    epoint *g, *EQs, *tmpResult, *EPKs; 
+
+    big H1CODE,CM5_,SM2,SM3,SM4,TID,tmpPoint,SID;
+    big qs,CM1,CM2,CM3,CM4,CM5,CM6,Yj,T3,T4,sks,Xi,PKc;
+    epoint *g, *tmpResult; 
     big a,b,p,gx,gy;
 
 
     irand(seed);
 
-    Qs = mirvar(0);
     SID = mirvar(0);
-    AUTH_S = mirvar(0);
-    AUTH_S_P = mirvar(0);
-    T2 = mirvar(0);
-    SM1 = mirvar(0);
-    Xi_ = mirvar(0);
-    PKs = mirvar(0);
-    skj = mirvar(0);
-    PKs = mirvar(0);
-    checkPoint = mirvar(0);
-    tmpPoint = mirvar(0);
-    CODE=mirvar(0);
-    yj=mirvar(0);
+    Xi = mirvar(0);
+    sks = mirvar(0);
     PKc=mirvar(0);
 
+    TID=mirvar(0);
+    qs=mirvar(0);
+    H1CODE = mirvar(0);
     Yj=mirvar(0);
     T3 = mirvar(0);
+    T4 = mirvar(0);
     CM1 = mirvar(0);
     CM2 = mirvar(0);
     CM3 = mirvar(0);
     CM4 = mirvar(0);
     CM5 = mirvar(0);
     CM6 = mirvar(0);
+    SM2 = mirvar(0);
+    SM3 = mirvar(0);
 
 
     // ECC 설정
@@ -68,17 +62,19 @@ int main(int argc, char const *argv[]){
 
     mip->IOBASE=16;
     // argv 값 넣어주기
-    cinstr(skj,"A8522064E8B58B1846DECE8EB4C08F756583E454");
-    cinstr(Qs,"B22B3E44406A5D0F1BD1E05749B8B568129A88E877363620");
-    QS_D= 0;
-    cinstr(SID,"AAAA");
-    cinstr(AUTH_S,"F4DE69F53051E4F609BA21C2337F93EB7EB65D3E15F5F1B8D699ECA50F7EC0B527A3F55136E2A73");
-    cinstr(T2,"60D9C59B");
-    cinstr(SM1,"A7977E3AC0AC6AF883AB64D5CB6A100F115554ED842B97AA");
-    cinstr(PKs,"999A48ADD10173A41BCCF88D407626D57867F164D84AB712");
     cinstr(PKc,"B9E7FAB9D8ACF0E8CE7500678C679112B5AA15DBB1BC1A4F");
-    PKs_D=1;
-
+    cinstr(Xi,"A7977E3AC6474E9EDE709D390531F7066D27B1A3B07EA840");
+    cinstr(qs,"6167D7999019CACB1CFDD4601C10447E9EF01C3A");
+    cinstr(sks,"5A1ADFD946AD2ECB15F00518D7861FF861A4D88E");
+    cinstr(SID,"AAAA");
+    cinstr(Yj,"11540B076C5473A7A4C465B60163F856568D4AA03484EB35");
+    cinstr(T3,"60D9E04E");
+    cinstr(CM1,"8019D9F847C688EB7CE5ABF0698A9D4E3AAC1EDA");
+    cinstr(CM2,"9BA4A6CF97832035565C5822E9BC0556CD0DECDF");
+    cinstr(CM3,"800DC30AD72D3D13E3F075863CE49BE7B782CF07");
+    cinstr(CM4,"2E750367F5A1B73D8EC8BB050209B0FCAFC556C");
+    cinstr(CM5,"9F35D38783D5EA802E0FFC570A23968EA472E9F3");
+    cinstr(CM6,"7E6351DADEC7C9756FA16297D5FDDAE693D9627");
 
     // ECC 설정 
     convert(-3,a);
@@ -89,72 +85,49 @@ int main(int argc, char const *argv[]){
 
     ecurve_init(a,b,p,MR_BEST);
     g = epoint_init();
-    EQs = epoint_init();
-    EPKs = epoint_init();
     tmpResult = epoint_init();
     epoint_set(gx,gy,0,g); // ECC 설정 완료
-    epoint_set(Qs,Qs,QS_D,EQs); // ECC 설정 완료
-    epoint_set(PKs,PKs,PKs_D,EPKs); //ECC 설정완료
 
-    ecurve_mult(skj,EQs,tmpResult);
-    epoint_get(tmpResult,tmpPoint,tmpPoint);
-    Xi_ = XOR(SM1,hashing1(tmpPoint));
+//TODO 시작 
+    multiply(qs,Yj,tmpPoint);
+    H1CODE = XOR(CM6,hashing1(tmpPoint));
+    CM5_ = hashing1(concat(concat(concat(H1CODE,SID),tmpPoint),T3));
 
-    ecurve_mult(AUTH_S,g,tmpResult);
-    epoint_get(tmpResult,AUTH_S,AUTH_S);
-    
-    checkPoint = hashing1(concat(Xi_,concat(SID,concat(Qs,T2))));
-    ecurve_mult(checkPoint,EPKs,tmpResult);
-    ecurve_add(EQs,tmpResult);
-    epoint_get(tmpResult,tmpPoint,tmpPoint);
-
-    if(mr_compare(AUTH_S,tmpPoint)!=0){
-        printf("PID missmatch\n");
+    if(mr_compare(CM5,CM5)!=0){
+        printf("verified fail\n");
         return 0;
     }
-
-    bigdig(40,16,CODE);
-    bigdig(40,16,yj);
-
-    ecurve_mult(yj,g,tmpResult);
-    Yj_D=epoint_get(tmpResult,Yj,Yj);
-    
+   
     time_t T;
     time(&T);
-    convert(T,T3);
-    multiply(Xi_,yj,tmpPoint);
-    CM1 = XOR(CODE,hashing1(tmpPoint));
-    CM2 = hashing1(concat(concat(hashing1(CODE),tmpPoint),T3));
-    multiply(PKc,yj,tmpPoint);
-    CM3=XOR(CODE,hashing1(tmpPoint));
-    CM4 = hashing1(concat(concat(hashing1(CODE),tmpPoint),T3));
-    multiply(Qs,yj,tmpPoint);
-    CM5 = hashing1(concat(concat(concat(hashing1(CODE),SID),tmpPoint),T3));
-    CM6 = XOR(hashing1(CODE),hashing1(tmpPoint));
+    convert(T,T4);
 
-    printf("Yj : ");
-    cotnum(Yj,stdout);
-
+    multiply(Xi,sks,tmpPoint);
+    SM2 = XOR(TID,hashing1(tmpPoint));
+    SM3 = hashing1(concat(concat(concat(concat(H1CODE,TID),Yj),T4),tmpPoint));
+    multiply(PKc,sks,tmpPoint);
+    SM4 = hashing1(concat(concat(concat(H1CODE,Yj),T4),tmpPoint));
+    
     printf("CM1 : ");
     cotnum(CM1,stdout);
 
     printf("CM2 : ");
     cotnum(CM2,stdout);
 
-    printf("CM3 : ");
-    cotnum(CM3,stdout);
-
-    printf("CM4 : ");
-    cotnum(CM4,stdout);
-
-    printf("CM5 : ");
-    cotnum(CM5,stdout);
-
-    printf("CM6 : ");
-    cotnum(CM6,stdout);
-
+    printf("SM2 : ");
+    cotnum(SM2,stdout);
+    
+    printf("SM3 : ");
+    cotnum(SM3,stdout);
+    
     printf("T3 : ");
     cotnum(T3,stdout);
+
+    printf("T4 : ");
+    cotnum(T4,stdout);
+
+    printf("Yj : ");
+    cotnum(Yj,stdout);
 
     return 0;
 }
