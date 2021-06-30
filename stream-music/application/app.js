@@ -54,7 +54,7 @@ io.on('connection', function(socket){
 
 });
 
-server.listen(3000,()=>{
+server.listen(3001,()=>{
   console.log('서버 실행 중!');
 })
 

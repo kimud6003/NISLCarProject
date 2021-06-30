@@ -32,10 +32,10 @@
                 "ca.sales1.smartcar.com"
             ],
             "adminPrivateKey": {
-                "path":"../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/users/Admin@sales1.smartcar.com/msp/keystore/95fd0afadd873f85dc50de6fe177bb1aadb7450e5a693b451e25064737ce2b47_sk"
+                "path":"../../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/users/Admin@sales1.smartcar.com/msp/keystore/91e8fad38c9a6ebb9d0db359f89dbe98d5e9fb03cf0439e98f0a40df63a0fb12_sk"
             },
             "signedCert":{
-                "path":"../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/users/Admin@sales1.smartcar.com/msp/signcerts/Admin@sales1.smartcar.com-cert.pem"
+                "path":"../../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/users/Admin@sales1.smartcar.com/msp/signcerts/Admin@sales1.smartcar.com-cert.pem"
             }
         }
     },
@@ -47,7 +47,7 @@
                 "grpc-max-send-message-length": -1
             },
             "tlsCACerts": {
-                "path": "../basic-network/crypto-config/ordererOrganizations/smartcar.com/orderers/orderer.smartcar.com/msp/tlscacerts/tlsca.smartcar.com-cert.pem"
+                "path": "../../basic-network/crypto-config/ordererOrganizations/smartcar.com/orderers/orderer.smartcar.com/msp/tlscacerts/tlsca.smartcar.com-cert.pem"
             }
         }
     },
@@ -55,7 +55,7 @@
         "peer0.sales1.smartcar.com": {
             "url": "grpc://localhost:7051",
             "tlsCACerts": {
-                "path": "../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/peers/peer0.sales1.smartcar.com/msp/tlscacerts/tlsca.sales1.smartcar.com-cert.pem"
+                "path": "../../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/peers/peer0.sales1.smartcar.com/msp/tlscacerts/tlsca.sales1.smartcar.com-cert.pem"
             },
             "grpcOptions": {
                 "ssl-target-name-override": "peer1.sales1.smartcar.com",
@@ -68,7 +68,7 @@
             "url": "http://localhost:7054",
             "caName": "ca.sales1.smartcar.com",
             "tlsCACerts": {
-                "path": "../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/ca/ca.sales1.smartcar.com-cert.pem"
+                "path": "../../basic-network/crypto-config/peerOrganizations/sales1.smartcar.com/ca/ca.sales1.smartcar.com-cert.pem"
             },
             "registrar":{
                 "enrollId": "admin",
