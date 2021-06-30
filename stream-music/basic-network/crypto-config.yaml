@@ -1,0 +1,19 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: smartcar.com
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  - Name: Sales1
+    Domain: sales1.smartcar.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+  - Name: Sales2
+    Domain: sales2.smartcar.com
+    Template:
+      Count: 2
+    Users:
+      Count: 1
