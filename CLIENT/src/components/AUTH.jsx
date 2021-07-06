@@ -41,17 +41,26 @@ const AUTH= () => {
         if(err){
           console.error(err);
         }else{
+            console.log("AUTH3 result : ");
             console.log(stdout);
             let parsing = stdout.split("\n");
             let msg = {sendId : User.sendId,rcvId : User.rcvId,Yj : parsing[0], Yj_D : parsing[1], CM1 : parsing[2], CM2 : parsing[3], CM3 : parsing[4], CM4 : parsing[5], CM5 : parsing[6], CM6 : parsing[7], T3 : parsing[8]}
-            console.log(msg);
             socket.emit('Auth4',msg);
         }
       })
     })
       socket.on("Auth5",data => {
-        console.log("TID : " + User.TID);
-        console.log("CODE : " + User.CODE);
+        console.log(data);
+        exec(`./Clib/AUTH/Auth5 ${User.xi} ${data.Yj} ${data.Yj_D}  ${data.CM1} ${data.CM2} ${data.SM2} ${data.SM3} ${data.T3} ${data.T4} `,
+        function callback(err,stdout,stderr){
+          if(err){
+            console.error(err);
+          }else{
+            console.log("AUTH5 result : ");
+            console.log(stdout);
+            
+          }
+        })
       })
     };
   }, []);
@@ -63,6 +72,8 @@ const AUTH= () => {
         if (err){
           console.error(err);
           }else{
+            console.log("AUTH1 result : ");
+            console.log(stdout);
             let parsing = stdout.split("\n");
             User.Xi = parsing[0];
             User.Xi_D = parsing[1];
@@ -70,11 +81,13 @@ const AUTH= () => {
             User.AUTH = parsing[3];
             User.T1 = parsing[4];
             User.Reqst = parsing[5];
+            User.xi = parsing[6];
 
 // TODO SOCKET 통신 구간 
             User.sendId = User.id;
             User.rcvId = values.socketId;
             const msg = {sendId : User.sendId,rcvId : User.rcvId,Xi : User.Xi,Xi_D : User.Xi_D, CPID : User.CPID, AUTH : User.AUTH, T1 : User.T1, request : User.Reqst, PID : User.PID, PKi: User.PKi, PKi_D: User.PKi_D }
+
             socket.emit('Auth1',{msg});
           }
       }

@@ -119,7 +119,6 @@ int main(int argc, char const *argv[]){
     add(xi,AUTH,AUTH);
 
     // printf("xi:");
-    // cotnum(xi,stdout);
 
     // printf("Xi : ");
     cotnum(Xi,stdout);
@@ -134,7 +133,9 @@ int main(int argc, char const *argv[]){
     // printf("T1 : ");
     cotnum(T1,stdout);
 
-    printf("%s",argv[9]);
+    printf("%s\n",argv[9]);
+    
+    cotnum(xi,stdout);
 
     return 0;
 }

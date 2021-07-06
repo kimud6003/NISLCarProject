@@ -4,6 +4,25 @@
 #include "miracl.h"
 #include <time.h>
 
+static big catDPoint(big input1, int input2) {
+    char inputChar1[1000]="";
+    char inputChar2[1000]="";
+    big ouput;
+    ouput=mirvar(0);
+    cotstr(input1,inputChar1);
+    sprintf(inputChar2,"%d",input2);
+    char *outputChar = malloc(strlen(inputChar1) + strlen(inputChar2) + 1);
+    strcpy(outputChar, inputChar1);
+    strcat(outputChar, inputChar2);
+    cinstr(ouput,outputChar);
+    // printf("concat\n");
+    // cotnum(ouput,stdout);
+    return ouput;
+}
+
+static
+
+
 static big setPoint(epoint* Result,int curveDefine){
     big XPoint;
     XPoint = mirvar(0);

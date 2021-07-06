@@ -5,6 +5,7 @@ const singleValue = {
     pki:0,
     Xi:0,
     qs:0,
+    Yj_d:0,
 }
 
 exports.Value=singleValue;

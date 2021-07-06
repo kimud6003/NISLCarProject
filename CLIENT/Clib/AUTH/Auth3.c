@@ -26,7 +26,7 @@ int main(int argc, char const *argv[]){
     big Qs,SID,AUTH_S,T2,SM1,skj,PKs,CODE,yj,Yj;
     big Xi_,tmpPoint,AUTH_S_P,checkPoint,T3,PKc;
     big CM1,CM2,CM3,CM4,CM5,CM6;
-    epoint *g, *EQs, *tmpResult, *EPKs; 
+    epoint *g, *EQs, *tmpResult, *EPKs, *EXi_; 
     big a,b,p,gx,gy;
 
     irand(seed);
@@ -90,6 +90,7 @@ int main(int argc, char const *argv[]){
     g = epoint_init();
     EQs = epoint_init();
     EPKs = epoint_init();
+    EXi_ = epoint_init();
     tmpResult = epoint_init();
     epoint_set(gx,gy,0,g); // ECC 설정 완료
     epoint_set(Qs,Qs,QS_D,EQs); // ECC 설정 완료
@@ -122,14 +123,17 @@ int main(int argc, char const *argv[]){
     time(&T);
     convert(T,T3);
 
-    // ecurve_mult(yj,Xi_,tmpResult);
-    multiply(yj,Xi_,tmpPoint);
+    epoint_set(Xi_,Xi_,0,EXi_);
+    ecurve_mult(yj,EXi_,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
+    // multiply(yj,Xi_,tmpPoint);
     CM1 = XOR(CODE,hashing1(tmpPoint));
     CM2 = hashing1(concat(concat(hashing1(CODE),tmpPoint),T3));
     multiply(PKc,yj,tmpPoint);
     CM3=XOR(CODE,hashing1(tmpPoint));
     CM4 = hashing1(concat(concat(hashing1(CODE),tmpPoint),T3));
-    multiply(Qs,yj,tmpPoint);
+    ecurve_mult(yj,EQs,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
     CM5 = hashing1(concat(concat(concat(hashing1(CODE),SID),tmpPoint),T3));
     CM6 = XOR(hashing1(CODE),hashing1(tmpPoint));
 
@@ -159,6 +163,12 @@ int main(int argc, char const *argv[]){
     // printf("T3 : ");
     cotnum(T3,stdout);
 
+    cotnum(CODE,stdout);
+
+    printf("EQS = ");
+    ecurve_mult(yj,EQs,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
+    cotnum(tmpPoint,stdout);
     return 0;
 }
 

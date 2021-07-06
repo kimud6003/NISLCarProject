@@ -25,7 +25,7 @@ int main(int argc, char const *argv[]){
 
     big H1CODE,CM5_,SM2,SM3,SM4,TID,tmpPoint,SID;
     big qs,CM1,CM2,CM3,CM4,CM5,CM6,Yj,T3,T4,sks,Xi,PKc;
-    epoint *g, *tmpResult; 
+    epoint *g, *tmpResult, *EXI, *EPKc, *EYj; 
     big a,b,p,gx,gy;
 
 
@@ -35,6 +35,7 @@ int main(int argc, char const *argv[]){
     Xi = mirvar(0);
     sks = mirvar(0);
     PKc=mirvar(0);
+    tmpPoint = mirvar(0);
 
     TID=mirvar(0);
     qs=mirvar(0);
@@ -52,7 +53,7 @@ int main(int argc, char const *argv[]){
     SM3 = mirvar(0);
 
 
-    // ECC 설정
+
     a=mirvar(0);
     b=mirvar(0);
     p=mirvar(0);
@@ -62,24 +63,24 @@ int main(int argc, char const *argv[]){
 
     mip->IOBASE=16;
     // argv 값 넣어주기
-
-
     cinstr(sks,"5A1ADFD946AD2ECB15F00518D7861FF861A4D88E");
     cinstr(PKc,"B9E7FAB9D8ACF0E8CE7500678C679112B5AA15DBB1BC1A4F");
 
     cinstr(Xi,argv[1]);
-    cinstr(qs,argv[2]);
+    int Xi_D = atoi(argv[2]);
+    cinstr(qs,argv[3]);
     cinstr(SID,"AAAA");
 
 
-    cinstr(Yj,argv[3]);
-    cinstr(T3,argv[4]);
-    cinstr(CM1,argv[5]);
-    cinstr(CM2,argv[6]);
-    cinstr(CM3,argv[7]);
-    cinstr(CM4,argv[8]);
-    cinstr(CM5,argv[9]);
-    cinstr(CM6,argv[10]);
+    cinstr(Yj,argv[4]);
+    cinstr(T3,argv[5]);
+    cinstr(CM1,argv[6]);
+    cinstr(CM2,argv[7]);
+    cinstr(CM3,argv[8]);
+    cinstr(CM4,argv[9]);
+    cinstr(CM5,argv[10]);
+    cinstr(CM6,argv[11]);
+    int Yj_D=atoi(argv[12]);
 
     // ECC 설정 
     convert(-3,a);
@@ -90,12 +91,23 @@ int main(int argc, char const *argv[]){
 
     ecurve_init(a,b,p,MR_BEST);
     g = epoint_init();
+    EPKc = epoint_init();
     tmpResult = epoint_init();
+    EXI = epoint_init();
+    EYj = epoint_init();
     epoint_set(gx,gy,0,g); // ECC 설정 완료
+    epoint_set(PKc,PKc,0,EPKc); // ECC 설정 완료
+    epoint_set(Xi,Xi,Xi_D,EXI); // ECC 설정 완료
+    epoint_set(Yj,Yj,Yj_D,EYj); // ECC 설정 완료
 
 //TODO 시작 
-    multiply(qs,Yj,tmpPoint);
+    
+    // multiply(qs,Yj,tmpPoint);
+    ecurve_mult(qs,EYj,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
     H1CODE = XOR(CM6,hashing1(tmpPoint));
+    // printf("test\n");
+    // cotnum(tmpPoint,stdout);
     CM5_ = hashing1(concat(concat(concat(H1CODE,SID),tmpPoint),T3));
 
     if(mr_compare(CM5,CM5)!=0){
@@ -106,11 +118,14 @@ int main(int argc, char const *argv[]){
     time_t T;
     time(&T);
     convert(T,T4);
+    bigdig(35,16,TID);
 
-    multiply(Xi,sks,tmpPoint);
+    ecurve_mult(sks,EXI,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
     SM2 = XOR(TID,hashing1(tmpPoint));
     SM3 = hashing1(concat(concat(concat(concat(H1CODE,TID),Yj),T4),tmpPoint));
-    multiply(PKc,sks,tmpPoint);
+    ecurve_mult(sks,EPKc,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
     SM4 = hashing1(concat(concat(concat(H1CODE,Yj),T4),tmpPoint));
     
     cotnum(CM1,stdout);
@@ -127,6 +142,12 @@ int main(int argc, char const *argv[]){
 
     cotnum(Yj,stdout);
 
+    printf("==============\n");
+    // ecurve_mult(sks,EXI,tmpResult);
+    // epoint_get(tmpResult,tmpPoint,tmpPoint);
+    // cotnum(tmpPoint,stdout);
+    printf("test\n");
+    cotnum(H1CODE,stdout);
     return 0;
 }
 

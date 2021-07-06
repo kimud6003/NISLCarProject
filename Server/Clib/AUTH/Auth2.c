@@ -73,10 +73,6 @@ int main(int argc, char const *argv[]){
     cinstr(sks,"5A1ADFD946AD2ECB15F00518D7861FF861A4D88E");
     cinstr(SID,"AAAA");
 
-    cinstr(ski,"2A98E2DAC9176641F4DCDD7233006991016AEFD2");
-    cinstr(xi,"D0963A3A7474D0F96C352D7A5C45F2A059D025F9");
-    // char requst[] = "3430주 10";
-
     // ECC 설정 
     convert(-3,a);
     cinstr(b,ecb);

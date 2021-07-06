@@ -22,11 +22,10 @@ int main(int argc, char const *argv[]){
     srand(time(NULL));
     long seed = rand()%100;
     miracl *mip=mirsys(100,0);
-    big H1CODE,CM5_,SM2,SM3,SM4,tmpPoint,SID;
-    big qs,CM1,CM2,CM3,CM4,CM5,CM6,Yj,T3,T4,sks,Xi,PKc;
-
+    big H1CODE,CM5_,SM2,SM3,tmpPoint,SID;
+    big qs,CM1,CM2,Yj,T3,T4,sks,Xi,PKc;
     big xi,CODE,CM2_,TID_,PKs,SM3_;
-    epoint *g, *tmpResult; 
+    epoint *g, *tmpResult, *EYj, *EPKs; 
     big a,b,p,gx,gy;
 
 
@@ -47,10 +46,6 @@ int main(int argc, char const *argv[]){
     T4 = mirvar(0);
     CM1 = mirvar(0);
     CM2 = mirvar(0);
-    CM3 = mirvar(0);
-    CM4 = mirvar(0);
-    CM5 = mirvar(0);
-    CM6 = mirvar(0);
     SM2 = mirvar(0);
     SM3 = mirvar(0);
     
@@ -75,20 +70,19 @@ int main(int argc, char const *argv[]){
     // argv 값 넣어주기
     cinstr(PKs,"999A48ADD10173A41BCCF88D407626D57867F164D84AB712");
     cinstr(PKc,"B9E7FAB9D8ACF0E8CE7500678C679112B5AA15DBB1BC1A4F");
-    cinstr(Xi,"A7977E3AC6474E9EDE709D390531F7066D27B1A3B07EA840");
-    cinstr(qs,"6167D7999019CACB1CFDD4601C10447E9EF01C3A");
-    cinstr(sks,"5A1ADFD946AD2ECB15F00518D7861FF861A4D88E");
     cinstr(SID,"AAAA");
-    cinstr(Yj,"11540B076C5473A7A4C465B60163F856568D4AA03484EB35");
-    cinstr(T3,"60D9E04E");
-    cinstr(CM1,"8019D9F847C688EB7CE5ABF0698A9D4E3AAC1EDA");
-    cinstr(CM2,"9BA4A6CF97832035565C5822E9BC0556CD0DECDF");
-    cinstr(CM4,"2E750367F5A1B73D8EC8BB050209B0FCAFC556C");
-    cinstr(CM5,"9F35D38783D5EA802E0FFC570A23968EA472E9F3");
-    cinstr(CM6,"7E6351DADEC7C9756FA16297D5FDDAE693D9627");
+
+    cinstr(xi,argv[1]);
+    cinstr(Yj,argv[2]);
+    int Yj_D = atoi(argv[3]);
+    cinstr(CM1,argv[4]);
+    cinstr(CM2,argv[5]);
+    cinstr(SM2,argv[6]);
+    cinstr(SM3,argv[7]);
+    cinstr(T3,argv[8]);
+    cinstr(T4,argv[9]);
 
 
-    cinstr(xi,"D0963A3A7474D0F96C352D7A5C45F2A059D025F9");
     // ECC 설정 
     convert(-3,a);
     cinstr(b,ecb);
@@ -99,32 +93,36 @@ int main(int argc, char const *argv[]){
     ecurve_init(a,b,p,MR_BEST);
     g = epoint_init();
     tmpResult = epoint_init();
+    EYj = epoint_init();
+    EPKs = epoint_init();
     epoint_set(gx,gy,0,g); // ECC 설정 완료
+    epoint_set(Yj,Yj,Yj_D,EYj); // ECC 설정 완료
+    epoint_set(PKs,PKs,0,EPKs); // ECC 설정 완료
 
 //TODO 시작 
-    multiply(Yj,xi,tmpPoint);
-    cotnum(tmpPoint,stdout);
+    ecurve_mult(xi,EYj,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
     CODE = XOR(CM1,hashing1(tmpPoint));
     CM2_ = hashing1(concat(concat(hashing1(CODE),tmpPoint),T3));
 
+
     if(mr_compare(CM2,CM2_)!=0){
-        printf("CM verified fail\n");
+        printf("CM verified fail2\n");
         return 0;
     }
 
-    time_t T;
-    time(&T);
-    convert(T,T4);
-    multiply(xi,PKs,tmpPoint);
+    ecurve_mult(xi,EPKs,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
 
     TID_ = XOR(SM2,hashing1(tmpPoint));
     SM3_ = hashing1(concat(concat(concat(concat(hashing1(CODE),TID_),Yj),T4),tmpPoint));
-
-
     if(mr_compare(SM3,SM3_)!=0){
         printf("SM verified fail\n");
         return 0;
     }
+
+    cotnum(TID_,stdout);
+    cotnum(CODE,stdout);
    
 
 

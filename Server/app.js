@@ -57,19 +57,19 @@ io.on(`connect`,function(socket){
   socket.on('Auth1',(data)=>{
     const msg = data.msg;
     Single.Value.Xi = msg.Xi;
+    Single.Value.Xi_D = msg.Xi_D;
     exec(`./Clib/AUTH/Auth2 ${msg.PID} ${msg.Xi} ${msg.Xi_D} ${msg.CPID} ${msg.AUTH} ${msg.T1} ${msg.request}  ${msg.PKi} ${msg.PKi_D}`,function callback(err,stdout,stderr){
     if(err){
       console.log(err);
     }
-    console.log(`Auth2 complete`)
-    console.log(clients);
+    console.log("AUTH2 result : ");
+    console.log(stdout);
     let parsing = stdout.split("\n");
     Single.Value.qs = parsing[6];
     let data = {uid : msg.uid ,QS : parsing[0],QS_D : parsing[1], SID : parsing[2], AUTH_S : parsing[3], T2 : parsing[4], SM1 : parsing[5]}
     for (var i=0; i < clients.length; i++) {
       console.log(clients[i].uid);
       if(clients[i].uid == msg.rcvId){
-        console.log(clients[i].id);
         io.to(clients[i].id).emit("Auth2",data);
       };
     }
@@ -77,17 +77,18 @@ io.on(`connect`,function(socket){
   })
   socket.on('Auth4',(data)=>{
     const msg = data;
-    console.log(msg);
-    exec(`./Clib/AUTH/Auth4 ${Single.Value.Xi} ${Single.Value.qs} ${msg.Yj} ${msg.T3} ${msg.CM1} ${msg.CM2}  ${msg.CM3} ${msg.CM4} ${msg.CM5} ${msg.CM6}`,function callback(err,stdout,stderr){
+    Single.Value.Yj_D = msg.Yj_D;
+    exec(`./Clib/AUTH/Auth4 ${Single.Value.Xi} ${Single.Value.Xi_D} ${Single.Value.qs} ${msg.Yj} ${msg.T3} ${msg.CM1} ${msg.CM2}  ${msg.CM3} ${msg.CM4} ${msg.CM5} ${msg.CM6} ${msg.Yj_D}`,function callback(err,stdout,stderr){
     if(err){
       console.log(err);
     }
+    console.log("AUTH4 result : ");
+    console.log(stdout);
     let parsing = stdout.split("\n");
-    let data = {sendid : msg.sendId , CM1 : parsing[0], CM2 : parsing[1], SM2 : parsing[2], SM3 : parsing[3], T3 : parsing[4], T4 : parsing[5], Yj : parsing[6]}
-    console.log(data);
+    let data = {sendid : msg.sendId , CM1 : parsing[0], CM2 : parsing[1], SM2 : parsing[2], SM3 : parsing[3], T3 : parsing[4], T4 : parsing[5], Yj : parsing[6], Yj_D : msg.Yj_D }
     for (var i=0; i < clients.length; i++) {
       if(clients[i].uid == msg.rcvId){
-        console.log(clients[i].id);
+        console.log("AUTH5");
         io.to(clients[i].id).emit("Auth5",data);
       };
     }

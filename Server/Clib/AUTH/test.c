@@ -91,56 +91,93 @@ int main(int argc, char const *argv[]){
     epoint_set(PKs,PKs,0,EPKs); //ECC 설정완료
     epoint_set(PKj,PKj,0,EPKj); //ECC 설정완료
 
-//SKS * g  PKs
-    ecurve_mult(SKs,g,tmpResult);
-    int c=epoint_get(tmpResult,tmpPoint,tmpPoint);
-    printf("*SKs_D : %d ",c);
+// //SKS * g  PKs
+//     ecurve_mult(SKs,g,tmpResult);
+//     int c=epoint_get(tmpResult,tmpPoint,tmpPoint);
+//     printf("*SKs_D : %d ",c);
 
-//qs * PKJ (qs * (skj * g))
-    ecurve_mult(qs,EPKj,tmpResult);
-    tmpPoint=XsetPoint(tmpResult);
-    printf("*tmpPoint : ");
-    cotnum(tmpPoint,stdout);
+// //qs * PKJ (qs * (skj * g))
+//     ecurve_mult(qs,EPKj,tmpResult);
+//     tmpPoint=XsetPoint(tmpResult);
+//     printf("*tmpPoint : ");
+//     cotnum(tmpPoint,stdout);
 
-//qs * g = QS
-    ecurve_mult(qs,g,tmpResult);
-    tmpPoint=XsetPoint(tmpResult);
-    printf("*QS : ");
-    cotnum(tmpPoint,stdout);
+// //qs * g = QS
+//     ecurve_mult(qs,g,tmpResult);
+//     tmpPoint=XsetPoint(tmpResult);
+//     printf("*QS : ");
+//     cotnum(tmpPoint,stdout);
 
 // skj * g = PKJ
-    ecurve_mult(skj,g,tmpResult);
+    big t_1,t_2,t_3;
+    epoint *t1E,*t2E,*t3E;
+    int ts1,ts2,ts3; 
+    t1E = epoint_init();
+    t2E = epoint_init();
+    t3E = epoint_init();
+    t_1= mirvar(3);
+    t_2= mirvar(-2);
+    t_3= mirvar(6);
+    printf("=================\n");
+    ecurve_mult(t_1,g,tmpResult);
+    ts1 = epoint_get(tmpResult,tmpPoint,tmpPoint);
+    printf("t_1*g의 X 좌표 : ");
+    cotnum(tmpPoint,stdout);
+    epoint_set(tmpPoint,tmpPoint,ts1,t1E); // ECC 설정 완료
+
+
+    ecurve_mult(t_2,g,tmpResult);
+    ts2 = epoint_get(tmpResult,tmpPoint,tmpPoint);
+    printf("t_2*g의 X 좌표 : ");
+    cotnum(tmpPoint,stdout);
+    epoint_set(tmpPoint,tmpPoint,0,t2E); // ECC 설정 완료
+    
+
+    ecurve_mult(t_2,t1E,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
+    printf("t_2*(t_1*g)의 X 좌표 : ");
+    cotnum(tmpPoint,stdout);
+    // epoint_set(tmpPoint,tmpPoint,ts1,t1E); // ECC 설정 완료
+
+
+    ecurve_mult(t_1,t2E,tmpResult);
+    epoint_get(tmpResult,tmpPoint,tmpPoint);
+    printf("t_1*(t_2*g)의 X 좌표 : ");
+    cotnum(tmpPoint,stdout);
+
+
+    ecurve_mult(t_3,g,tmpResult);
     tmpPoint=XsetPoint(tmpResult);
-    printf("*PKJ : ");
+    printf("t_3*g: ");
     cotnum(tmpPoint,stdout);
 
-//skj * Qs (skj * (qs * g))
-    ecurve_mult(skj,EQs,tmpResult);
-    tmpPoint= XsetPoint(tmpResult);
-    printf("SKJ * QS : ");
-    cotnum(tmpPoint,stdout);
+// //skj * Qs (skj * (qs * g))
+//     ecurve_mult(skj,EQs,tmpResult);
+//     tmpPoint= XsetPoint(tmpResult);
+//     printf("SKJ * QS : ");
+//     cotnum(tmpPoint,stdout);
 
-    Xi_ = hashing1(XOR(SM1,hashing1(tmpPoint)));
-    printf("Xi_ : ");
-    cotnum(Xi_,stdout);
+//     Xi_ = hashing1(XOR(SM1,hashing1(tmpPoint)));
+//     printf("Xi_ : ");
+//     cotnum(Xi_,stdout);
 
-    ecurve_mult(AUTH_S,g,tmpResult);
-    AUTH_S_P = XsetPoint(tmpResult);
-    // subtract(AUTH_S,qs,AUTH_S);
-    // cotnum(AUTH_S,stdout);
-    // printf("test : ");
-    cotnum(AUTH_S,stdout);
+//     ecurve_mult(AUTH_S,g,tmpResult);
+//     AUTH_S_P = XsetPoint(tmpResult);
+//     // subtract(AUTH_S,qs,AUTH_S);
+//     // cotnum(AUTH_S,stdout);
+//     // printf("test : ");
+//     cotnum(AUTH_S,stdout);
 
-    checkPoint = hashing1(concat(Xi_,concat(SID,concat(Qs,T2))));
-    // multiply(checkPoint,sks,checkPoint);
-    // printf("test : ");
-    // cotnum(checkPoint,stdout);
+//     checkPoint = hashing1(concat(Xi_,concat(SID,concat(Qs,T2))));
+//     // multiply(checkPoint,sks,checkPoint);
+//     // printf("test : ");
+//     // cotnum(checkPoint,stdout);
 
 
-    ecurve_mult(checkPoint,EPKs,tmpResult);
-    XsetPoint(tmpResult);
-    ecurve_add(EQs,tmpResult);
-    cotnum(XsetPoint(tmpResult),stdout);
+//     ecurve_mult(checkPoint,EPKs,tmpResult);
+//     XsetPoint(tmpResult);
+//     ecurve_add(EQs,tmpResult);
+//     cotnum(XsetPoint(tmpResult),stdout);
 
     return 0;
 }
