@@ -78,25 +78,6 @@ func generateKey(APIstub shim.ChaincodeStubInterface, key string) []byte {
 	return returnValueBytes
 }
 
-// func (s *SmartContract) initWallet(APIstub shim.ChaincodeStubInterface) pb.Response {
-// 	seller := Wallet{ID: "1Q2W3E4R", Status:""}
-// 	customer := Wallet{ID: "5T6Y7U8", Status:""}
-
-// 	SellerasJSONBytes, _ := json.Marshal(seller)
-// 	err := APIstub.PutState(seller.ID, SellerasJSONBytes)
-// 	if err != nil {
-// 		return shim.Error("Failed to create asset " + seller.ID)
-// 	}
-// 	// Convert customer to []byte
-// 	CustomerasJSONBytes, _ := json.Marshal(customer)
-// 	err = APIstub.PutState(customer.ID, CustomerasJSONBytes)
-// 	if err != nil {
-// 		return shim.Error("Failed to create asset " + customer.ID)
-// 	}
-
-// 	return shim.Success(nil)
-// }
-
 func (s *SmartContract) setWallet(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 6 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
@@ -171,66 +152,39 @@ func (s *SmartContract) getAllWallet(APIstub shim.ChaincodeStubInterface) pb.Res
 }
 
 func (s *SmartContract) setRentRecord(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
-	// var result []byte
-	// result = []byte("Walletkey is " + APIstub.GetTxID())
-
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
 
-	// Record:= RentRecord{TID: APIstub.GetTxID(), CID: args[0], H1CODE : args[1]}
-	Record:= RentRecord{TID: "KUD", CID: args[0], H1CODE : args[1]}
-
+	Record:= RentRecord{TID: APIstub.GetTxID(), CID: args[0], H1CODE : args[1]}
 	RecordasJSONBytes, _ := json.Marshal(Record)
+	result := []byte(RecordasJSONBytes);	
+	
 	err := APIstub.PutState(Record.TID, RecordasJSONBytes)
 	if err != nil {
 		return shim.Error("Failed to create RentRecord " + APIstub.GetTxID())
 	}
 
-	return shim.Success(nil)
+	return shim.Success(result)
 }
 
 
 func (s *SmartContract) getRentRecord(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
-	// var result []byte
+
 	RentRecordAsBytes, err := APIstub.GetState(args[0])
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	if RentRecordAsBytes != nil{
-		fmt.Println(RentRecordAsBytes)
-	}
-
+	
 	rentRecord := RentRecord{}
 	json.Unmarshal(RentRecordAsBytes, &rentRecord)
-
-	var buffer bytes.Buffer
-	buffer.WriteString("[")
-	bArrayMemberAlreadyWritten := false
-
-	if bArrayMemberAlreadyWritten == true {
-		buffer.WriteString(",")
-	}
-	buffer.WriteString("{\"TID\":")
-	buffer.WriteString("\"")
-	buffer.WriteString(rentRecord.TID)
-	buffer.WriteString("\"")
-
-	buffer.WriteString(", \"CID\":")
-	buffer.WriteString("\"")
-	buffer.WriteString(rentRecord.CID)
-	buffer.WriteString("\"")
-
-	buffer.WriteString(", \"H1CODE\":")
-	buffer.WriteString("\"")
-	buffer.WriteString(rentRecord.H1CODE)
-	buffer.WriteString("\"")
-
-	buffer.WriteString("}")
-	bArrayMemberAlreadyWritten = true
-	buffer.WriteString("]\n")
-
-	return shim.Success(buffer.Bytes())
+	stringRecord, err := json.Marshal(rentRecord)
+    if err != nil {
+        fmt.Println(err)
+    }
+	result := []byte(stringRecord);	
+	
+	return shim.Success(result)
 
 }
 
