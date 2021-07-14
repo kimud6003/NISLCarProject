@@ -12,8 +12,11 @@ import (
 type SmartContract struct {}
 
 type Wallet struct {
-	Name string `json:"name"`
 	ID   string `json:"id"`
+	PID   string `json:"pid"`
+	PK   string `json:"pki"`
+	INFO string `json:"info"`
+	LOCATION string `json:"location"`
 	Status string `json:"status"`
 }
 
@@ -58,20 +61,20 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) pb.Response 
 func (s *SmartContract) initWallet(APIstub shim.ChaincodeStubInterface) pb.Response {
 
 	//Declare wallets
-	seller := Wallet{Name: "Hyper", ID: "1Q2W3E4R", Status:""}
-	customer := Wallet{Name: "Ledger", ID: "5T6Y7U8", Status:""}
+	seller := Wallet{ID: "1Q2W3E4R", Status:""}
+	customer := Wallet{ID: "5T6Y7U8", Status:""}
 
 	// Convert seller to []byte
 	SellerasJSONBytes, _ := json.Marshal(seller)
 	err := APIstub.PutState(seller.ID, SellerasJSONBytes)
 	if err != nil {
-		return shim.Error("Failed to create asset " + seller.Name)
+		return shim.Error("Failed to create asset " + seller.PID)
 	}
 	// Convert customer to []byte
 	CustomerasJSONBytes, _ := json.Marshal(customer)
 	err = APIstub.PutState(customer.ID, CustomerasJSONBytes)
 	if err != nil {
-		return shim.Error("Failed to create asset " + customer.Name)
+		return shim.Error("Failed to create asset " + customer.PID)
 	}
 
 	return shim.Success(nil)
@@ -268,7 +271,31 @@ func (s *SmartContract) purchaseCar(APIstub shim.ChaincodeStubInterface, args []
 	CustomerAsBytes, err := APIstub.GetState(args[0])
 	if err != nil {
 		return shim.Error("Failed to get state")
-	}
+		var buffer bytes.Buffer
+		buffer.WriteString("[")
+		bArrayMemberAlreadyWritten := false
+	
+		if bArrayMemberAlreadyWritten == true {
+			buffer.WriteString(",")
+		}
+		buffer.WriteString("{\"Name\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(wallet.Name)
+		buffer.WriteString("\"")
+	
+		buffer.WriteString(", \"ID\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(wallet.ID)
+		buffer.WriteString("\"")
+	
+		buffer.WriteString(", \"Status\":")
+		buffer.WriteString("\"")
+		buffer.WriteString(wallet.Status)
+		buffer.WriteString("\"")
+	
+		buffer.WriteString("}")
+		bArrayMemberAlreadyWritten = true
+		
 	if CustomerAsBytes == nil {
 		return shim.Error("Entity not found")
 	}

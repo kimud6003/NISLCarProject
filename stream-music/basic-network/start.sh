@@ -9,7 +9,7 @@ docker-compose -f docker-compose.yaml up -d orderer.smartcar.com peer0.sales1.sm
 
 # wait for Hyperledger Fabric to start
 # incase of errors when running later commands, issue export FABRIC_START_TIMEOUT=<larger number>
-export FABRIC_START_TIMEOUT=10
+export FABRIC_START_TIMEOUT=3
 sleep ${FABRIC_START_TIMEOUT}
 
 # Create the channel

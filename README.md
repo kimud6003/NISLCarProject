@@ -7,6 +7,12 @@
   - [x] HASH 함수
   - [x] concatenate 함수 
 
+
+- chainCode
+  - PID,PKi
+  - CIDj,info,L,PKj
+  - TID',PID,CID,h1(code)
+  
 - 구현 리스트
 
   - [x] User 등록
