@@ -14,7 +14,7 @@ type SmartContract struct{}
 type Wallet struct {
 	ID       string `json:"ID"`
 	PID      string `json:"PID"`
-	PK       string `json:"PKI"`
+	PK       string `json:"PK"`
 	INFO     string `json:"INFO"`
 	LOCATION string `json:"LOCATION"`
 	STATUS   string `json:"STATUS"`

@@ -11,6 +11,7 @@ const port = 3000;
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+var ledgersRouter = require('./routes/ledger');
 const app = express();
 
 app.use(cors());
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/ledgers', ledgersRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));
