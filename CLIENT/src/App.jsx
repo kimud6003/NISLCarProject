@@ -2,26 +2,21 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import icon from '../assets/icon.svg';
 import './App.global.css';
-import {UserProvider} from './context/User.context'
-import Sider from './components/main';
+import styled,{ createGlobalStyle } from 'styled-components';
+import {UserProvider} from './context/User.context';
+import LoginPresenter from './Routes/Login/LoginPresenter';
 
-const Hello = () => {
-  return (
-    <div>
-      <UserProvider>
-        <Sider/>
-      </UserProvider>
-    </div>
-  );
-};
+
 
 export default function App() {
   return (
+    <UserProvider>
     <Router>
       <Switch>
-        <Route path="/" component={Hello} />
+        <Route path="/" component={LoginPresenter} />
       </Switch>
     </Router>
+    </UserProvider>
   );
 }
 

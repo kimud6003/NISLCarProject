@@ -1,1 +1,9 @@
-@import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+*{
+    font-family: 'Do Hyeon', cursive;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
