@@ -1,5 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { AiOutlineLeft } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Background = styled.div`
@@ -41,20 +43,25 @@ const BackButton = styled.button`
   background: #f8f9fa;
 `;
 
-function LoginPresenter() {
+function LoginPresenter({ history }) {
+  const goBack = () => {
+    history.goBack();
+  };
   return (
     <>
       <Background>
         <BackButton>
-          <AiOutlineLeft />
+          <AiOutlineLeft onClick={goBack} />
         </BackButton>
         <InsertForm>
           <Input placeholder="Car number" />
           <Input placeholder="Phone number" />
           <Input placeholder="Phone number auth" />
-          <LongButton>Next</LongButton>
-          <LongButton>Cancel</LongButton>
         </InsertForm>
+        <Link to="/main">
+          <LongButton>Next</LongButton>
+        </Link>
+        <LongButton>Cancel</LongButton>
       </Background>
     </>
   );

@@ -45,7 +45,9 @@ function LoginPresenter() {
         <Link to="/Login">
           <LoginButton>Log In</LoginButton>
         </Link>
-        <LoginButton signup>Sign Up</LoginButton>
+        <Link to="/">
+          <LoginButton signup>Sign Up</LoginButton>
+        </Link>
       </BottomBlock>
     </>
   );
