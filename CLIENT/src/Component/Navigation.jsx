@@ -6,7 +6,7 @@ import {
   AiOutlineUser,
 } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const ImageButton = styled(Link)`
   color: black;
